@@ -1,0 +1,197 @@
+'''
+Passdown_project__generator.py
+V1.0
+:author: Jack Murray
+company: Edwards Vacuum. ses
+jack.murray@edwardsvacuum.com
+'''
+
+import datetime
+import openpyxl
+
+# get date range for generating dictionary
+start_day = datetime.date(2023, 4, 3)
+end_day = datetime.date(2023, 7, 7)
+# TODO Get this info from somewhere other than the code
+
+def get_workdays(start_date, end_date):
+
+    '''
+    return a list of the dates of all the workdays between start_date and end_date
+
+    :param start_date: a datetime.date object
+    :param end_date: a datetime.date object
+    :returns: a list of dictionaries in the form {'date': datetime.date, 'week_num': int}
+    :rtype: list
+    :requires: datetime
+    :date: 2023-03-22
+    '''
+
+    workdays = []
+    current_date = start_date
+
+    while current_date <= end_date:
+        if current_date.weekday() < 5:  # Monday = 0, Friday = 4
+            workdays.append([current_date,
+                                current_date.isocalendar()[1],
+                                current_date.strftime("%m-%d")])
+
+        current_date += datetime.timedelta(days=1)
+
+    return workdays
+
+def create_workbook(sheet_names, filename):
+    '''
+    Create a new excel workbook with the given sheet names
+
+    :param sheet_names: a list of strings containing the names of the sheets to create
+    :param filename: a string containing the name of the file to save the workbook to (including the file extension)
+    :requires: openpyxl
+    :date: 2023-03-22
+    '''
+
+    # Create a new workbook
+    workbook = openpyxl.Workbook()
+
+    # Rename the default sheet to the first sheet name in the list
+    workbook.active.title = sheet_names[0]
+
+    # Create the remaining sheets using the remaining sheet names in the list
+    for name in sheet_names[1:]:
+        workbook.create_sheet(title=name)
+
+    # Save the workbook to a file
+    workbook.save(filename)
+
+def get_sheet_names(workdays):
+    '''
+    Create a list of strings containing the names of the sheets to create
+
+    :param workdays: a list of dictionaries in the form {'date': datetime.date, 'week_num': int}
+    :returns: a list of strings containing the names of the sheets to create
+    :rtype: list
+    :requires: openpyxl
+    :date: 2023-03-22
+    '''
+
+    sheet_names = []
+    sheet_names.append("Contents")
+    sheet_names.append("Passdown Summary")
+    for day in workdays:
+        sheet_names.append(day[2])
+    sheet_names.append("passdown_assets")
+
+    return sheet_names
+
+def copy_template_to_sheets(template_filename, sheet_range):
+    '''
+    Copy the template sheet to the specified sheets in the workbook
+    
+    :param template_filename: a string containing the name of the file to load the workbook from (including the file extension)
+    :param sheet_range: a range of sheet names to copy the template to
+    :requires: openpyxl
+    :date: 2023-03-22
+    '''
+
+    # Load the template file
+    wb = openpyxl.load_workbook(template_filename)
+
+    # Get the template sheet
+    template_sheet = wb.active
+
+    # Loop over the sheets in the specified range
+    for sheet_name in wb.sheetnames[sheet_range]:
+        # Skip the template sheet
+        if sheet_name == template_sheet.title:
+            continue
+
+        # Copy the template sheet to the current sheet
+        target_sheet = wb[sheet_name]
+        target_sheet.delete_rows(1, target_sheet.max_row)
+        for row in template_sheet.iter_rows():
+            for cell in row:
+                target_sheet[cell.coordinate].value = cell.value
+                target_sheet[cell.coordinate].number_format = cell.number_format
+                target_sheet[cell.coordinate].font = cell.font
+                target_sheet[cell.coordinate].border = cell.border
+                target_sheet[cell.coordinate].fill = cell.fill
+                target_sheet[cell.coordinate].alignment = cell.alignment
+
+    # Save the modified workbook
+    wb.save(template_filename)
+
+def create_daily_sheets(filename, workdays):
+    '''
+    Create a new excel workbook with the given sheet names
+
+    :param filename: a string containing the name of the file to load the workbook from (including the file extension)
+    :param workdays: a list of dictionaries in the form {'date': datetime.date, 'week_num': int}
+    :requires: openpyxl
+    :date: 2023-03-22
+    '''
+
+    # Load the workbook
+    wb = openpyxl.load_workbook(filename)
+
+    # Loop over the workdays
+    for day in workdays:
+        # Get the sheet for the current day
+        sheet = wb[day[2]]
+
+        #create sheet title
+        sheet.merge_cells("A1:P1")
+        sheet["A1"] = "Project Passdown for WorkWeek " + str(day[1]) + " - " + day[0].strftime("%A, %B %d, %Y")
+        sheet["A1"].font = openpyxl.styles.Font(bold=True, size=20)
+        sheet["A1"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="bottom")
+        sheet["A1"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
+        sheet["A1"].fill = openpyxl.styles.PatternFill(
+            patternType="solid", fgColor="C0C0C0")
+        #TODO: Add LOGO
+
+        # create edwards contact info
+        sheet.merge_cells("A2:P2")
+        sheet["A2"] = "Edwards Site Manager: Joseph Baca (505)975-9464   -   Edwards Project Manager: Robert Nolan (503)753-0590"
+        sheet["A2"].font = openpyxl.styles.Font(size=14)
+        sheet["A2"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="center")
+        sheet["A2"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
+        sheet["A2"].fill = openpyxl.styles.PatternFill(patternType="solid", fgColor="C0C0C0")
+
+    # Save the modified workbook
+    wb.save(filename)
+
+def create_contents_sheet(filename):
+    '''
+    Create a contents sheet in the workbook with links to all other sheets
+
+    :param filename: a string containing the name of the file to load the workbook from (including the file extension)
+    :requires: openpyxl
+    :date: 2023-03-22
+    '''
+    # Load the workbook
+    wb = openpyxl.load_workbook(filename)
+
+    # Create a new sheet for the contents
+    contents_sheet = wb.worksheets[0]
+
+    # Loop over the sheets and add links to the contents sheet
+    for sheet in wb.sheetnames:
+        # Skip the contents sheet
+        if sheet == "Contents":
+            continue
+
+        # Add a hyperlink to the sheet
+        cell = contents_sheet.cell(row=contents_sheet.max_row+1, column=1)
+        cell.value = sheet
+        cell.hyperlink = f"'{sheet}'!A1"
+
+    # Save the modified workbook
+    wb.save(filename)
+
+
+project_workbook = "excel/Project_Passdown_WW14-WW28.xlsm"
+my_workdays = get_workdays(start_day, end_day)
+sheet_names = get_sheet_names(my_workdays)
+create_workbook(sheet_names, project_workbook)
+create_contents_sheet(project_workbook)
+create_daily_sheets(project_workbook, my_workdays)
+
