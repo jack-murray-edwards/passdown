@@ -138,6 +138,24 @@ def create_daily_sheets(filename, workdays):
         # Get the sheet for the current day
         sheet = wb[day[2]]
 
+        #resize the columns
+        sheet.column_dimensions["A"].width = 11
+        sheet.column_dimensions["B"].width = 11
+        sheet.column_dimensions["C"].width = 43
+        sheet.column_dimensions["D"].width = 65
+        sheet.column_dimensions["E"].width = 8.75
+        sheet.column_dimensions["F"].width = 10.5
+        sheet.column_dimensions["G"].width = 22.5
+        sheet.column_dimensions["H"].width = 22.75
+        sheet.column_dimensions["I"].width = 22.75
+        sheet.column_dimensions["J"].width = 3.5
+        sheet.column_dimensions["K"].width = 11
+        sheet.column_dimensions["L"].width = 8.75
+        sheet.column_dimensions["M"].width = 14.5
+        sheet.column_dimensions["N"].width = 71
+        sheet.column_dimensions["O"].width = 12
+        sheet.column_dimensions["P"].width = 34
+
         #create sheet title
         sheet.merge_cells("A1:P1")
         sheet["A1"] = "Project Passdown for WorkWeek " + str(day[1]) + " - " + day[0].strftime("%A, %B %d, %Y")
@@ -155,6 +173,28 @@ def create_daily_sheets(filename, workdays):
         sheet["A2"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="center")
         sheet["A2"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
         sheet["A2"].fill = openpyxl.styles.PatternFill(patternType="solid", fgColor="C0C0C0")
+
+        #create passdown and look ahead headers
+        sheet.merge_cells("A3:I3")
+        sheet["A3"] = "Passdown"
+        sheet["A3"].font = openpyxl.styles.Font(bold=True, size=16)
+        sheet["A3"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="center")
+        sheet["A3"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
+        sheet["A3"].fill = openpyxl.styles.PatternFill(
+            patternType="solid", fgColor="808080")
+        
+        sheet.merge_cells("K3:P3")
+        sheet["K3"] = "Look Ahead"
+        sheet["K3"].font = openpyxl.styles.Font(bold=True, size=16)
+        sheet["K3"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="center")
+        sheet["K3"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
+        sheet["K3"].fill = openpyxl.styles.PatternFill(
+            patternType="solid", fgColor="808080")
+        
+        #create the divider between passdown and look ahead
+        sheet.merge_cells("J3:J103")
+        sheet["J3"].fill = openpyxl.styles.PatternFill(
+            patternType="solid", fgColor="000000")
 
     # Save the modified workbook
     wb.save(filename)
