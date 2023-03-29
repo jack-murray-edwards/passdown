@@ -235,13 +235,15 @@ def create_daily_sheets(filename, workdays):
         sheet.protection.sheet = True
         sheet.protection.set_password("!Edwards!")
         sheet.protection.enable()
+        # enable editing for passdown
+        for row in sheet.iter_rows(min_row=4, max_row=103, min_col=1, max_col=9):
+            for cell in row:
+                cell.protection = openpyxl.styles.Protection(locked=False)
 
-        # passdown_table_range = sheet["A4":"I103"]
-        # look_ahead_table_range = sheet["K4":"O103"]
-        # for cell in passdown_table_range:
-        #     cell.protection = openpyxl.styles.Protection(locked=False)
-        # for cell in look_ahead_table_range:
-        #     cell.protection = openpyxl.styles.Protection(locked=False)
+        # enable editing for look ahead
+        for row in sheet.iter_rows(min_row=4, max_row=103, min_col=11, max_col=15):
+            for cell in row:
+                cell.protection = openpyxl.styles.Protection(locked=False)
 
         #create passdown and look ahead table
         passdown_display_name = day[2] + "_Passdown"
@@ -251,7 +253,7 @@ def create_daily_sheets(filename, workdays):
 
 
         sheet_table_style = TableStyleInfo(
-            name="TableStyleMedium11", showRowStripes=True, showColumnStripes=True)
+            name="TableStyleMedium1", showRowStripes=True, showColumnStripes=False)
         
         passdown_table.tableStyleInfo = sheet_table_style
         look_ahead_table.tableStyleInfo = sheet_table_style
