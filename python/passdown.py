@@ -291,7 +291,7 @@ def create_contents_sheet(filename):
     wb.save(filename)
 
 
-project_workbook = "excel/Project_Passdown_WW14-WW28.xlsm"
+project_workbook = "excel/Project_Passdown_WW14-WW28.xlsx"
 my_workdays = get_workdays(start_day, end_day)
 sheet_names = get_sheet_names(my_workdays)
 create_workbook(sheet_names, project_workbook)
