@@ -308,6 +308,7 @@ def create_daily_sheets(filename, workdays):
     wb.save(filename)
 
 def create_contents_sheet(filename):
+
     '''
     Create a contents sheet in the workbook with links to all other sheets
 
@@ -336,6 +337,8 @@ def create_contents_sheet(filename):
     # Save the modified workbook
     wb.save(filename)
 
+def create_assets_sheet(filename):
+    #TODO create all sheet assets for data vallidation
 
 project_workbook = "excel/Project_Passdown_WW14-WW28.xlsx"
 my_workdays = get_workdays(start_day, end_day)
