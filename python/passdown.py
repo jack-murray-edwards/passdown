@@ -206,25 +206,28 @@ def create_daily_sheets(filename, workdays):
         sheet["J3"].fill = openpyxl.styles.PatternFill(
             patternType="solid", fgColor="000000")
         
+        #header styles
+        header_style = openpyxl.styles.Font(bold=True, size=11, color="e5e4e2")
+
         #create the passdown headers
         sheet["A4"] = "Task ID"
-        sheet["A4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["A4"].font = header_style
         sheet["B4"] = "Team Assigned"
-        sheet["B4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["B4"].font = header_style
         sheet["C4"] = "Task"
-        sheet["C4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["C4"].font = header_style
         sheet["D4"] = "Outcome"
-        sheet["D4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["D4"].font = header_style
         sheet["E4"] = "SMA"
-        sheet["E4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["E4"].font = header_style
         sheet["F4"] = "KAWIs"
-        sheet["F4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["F4"].font = header_style
         sheet["G4"] = "Next Step"
-        sheet["G4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["G4"].font = header_style
         sheet["H4"] = "AIO Request"
-        sheet["H4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["H4"].font = header_style
         sheet["I4"] = "AIO Completion"
-        sheet["I4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["I4"].font = header_style
 
         # passdown header formatting
         for row in sheet.iter_rows(min_row=4, max_row=4, min_col=1, max_col=9):
@@ -234,15 +237,15 @@ def create_daily_sheets(filename, workdays):
 
         #create the look ahead headers
         sheet["K4"] = "Task ID"
-        sheet["K4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["K4"].font = header_style
         sheet["L4"] = "Priority Rank"
-        sheet["L4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["L4"].font = header_style
         sheet["M4"] = "Estimated Completion"
-        sheet["M4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["M4"].font = header_style
         sheet["N4"] = "Task"
-        sheet["N4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["N4"].font = header_style
         sheet["O4"] = "Time"
-        sheet["O4"].font = openpyxl.styles.Font(color="e5e4e2", size=11)
+        sheet["O4"].font = header_style
 
         # Look ahead headers formatting
         for row in sheet.iter_rows(min_row=4, max_row=4, min_col=11, max_col=15):
