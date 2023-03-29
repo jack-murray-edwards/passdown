@@ -141,6 +141,7 @@ def create_daily_sheets(filename, workdays):
         # Get the sheet for the current day
         sheet = wb[day[2]]
         
+        #TODO alternating week tab colors
 
         #resize the columns
         sheet.column_dimensions["A"].width = 11
@@ -179,7 +180,7 @@ def create_daily_sheets(filename, workdays):
         #Add the logo
         img = openpyxl.drawing.image.Image(
             '/home/jack/Dropbox/Workspace/code/passdown/python/Edwards_logo_for_sheets.png')
-        sheet.add_image(img, "H1")
+        sheet.add_image(img, "G1")
 
         # create edwards contact info
         sheet.merge_cells("A2:P2")
@@ -296,6 +297,11 @@ def create_daily_sheets(filename, workdays):
             for cell in row:
                 cell.border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
 
+        #TODO fix edge border
+
+        #TODO Cell data validation for SMA and KAWIs
+
+        #TODO Text Wrapping in 
 
 
     # Save the modified workbook
@@ -316,6 +322,7 @@ def create_contents_sheet(filename):
     contents_sheet = wb.worksheets[0]
 
     # Loop over the sheets and add links to the contents sheet
+    #TODO add weekday, workweek and headers/formatting
     for sheet in wb.sheetnames:
         # Skip the contents sheet
         if sheet == "Contents":
@@ -324,7 +331,7 @@ def create_contents_sheet(filename):
         # Add a hyperlink to the sheet
         cell = contents_sheet.cell(row=contents_sheet.max_row+1, column=1)
         cell.value = sheet
-        cell.hyperlink = f"'{sheet}'!A1"
+        cell.hyperlink = f"'{sheet}'!A1"#FIXME get internal sheet link
 
     # Save the modified workbook
     wb.save(filename)
