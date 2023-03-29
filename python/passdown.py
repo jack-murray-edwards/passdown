@@ -140,6 +140,7 @@ def create_daily_sheets(filename, workdays):
     for day in workdays:
         # Get the sheet for the current day
         sheet = wb[day[2]]
+        
 
         #resize the columns
         sheet.column_dimensions["A"].width = 11
@@ -167,6 +168,7 @@ def create_daily_sheets(filename, workdays):
         
         #create sheet title
         sheet.merge_cells("A1:P1")
+        sheet.row_dimensions[1].height = 84
         sheet["A1"] = "Project Passdown for Work Week " + str(day[1]) + " - " + day[0].strftime("%A, %B %d, %Y")
         sheet["A1"].font = openpyxl.styles.Font(bold=True, size=20)
         sheet["A1"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="bottom")
