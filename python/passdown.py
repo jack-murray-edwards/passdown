@@ -175,9 +175,8 @@ def create_daily_sheets(filename, workdays):
             for cell in row:
                 cell.border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
         #Add the logo
-        img = openpyxl.drawing.image.Image(
-            '/home/jack/Dropbox/Workspace/code/passdown/Edwards_logo_for_sheets.png')
-        sheet.add_image(img, "C1")
+        img = openpyxl.drawing.image.Image('Edwards_logo_for_sheets.png')
+        sheet.add_image(img, "H1")
 
         # create edwards contact info
         sheet.merge_cells("A2:P2")
