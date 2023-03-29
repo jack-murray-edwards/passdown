@@ -8,6 +8,9 @@ jack.murray@edwardsvacuum.com
 
 import datetime
 import openpyxl
+from openpyxl.worksheet.table import Table, TableStyleInfo
+from openpyxl.utils.cell import range_boundaries
+
 
 # get date range for generating dictionary
 start_day = datetime.date(2023, 4, 3)
@@ -156,6 +159,12 @@ def create_daily_sheets(filename, workdays):
         sheet.column_dimensions["O"].width = 12
         sheet.column_dimensions["P"].width = 34
 
+        #create large boarder around the sheet
+        # sheet["A1:P103"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"),
+        #                                                 left=openpyxl.styles.Side(border_style="thick"),
+        #                                                 right=openpyxl.styles.Side(border_style="thick"),
+        #                                                 top=openpyxl.styles.Side(border_style="thick"))
+        
         #create sheet title
         sheet.merge_cells("A1:P1")
         sheet["A1"] = "Project Passdown for WorkWeek " + str(day[1]) + " - " + day[0].strftime("%A, %B %d, %Y")
@@ -195,6 +204,60 @@ def create_daily_sheets(filename, workdays):
         sheet.merge_cells("J3:J103")
         sheet["J3"].fill = openpyxl.styles.PatternFill(
             patternType="solid", fgColor="000000")
+        
+        #create the passdown headers
+        sheet["A4"] = "Task ID"
+        sheet["B4"] = "Team Assigned"
+        sheet["C4"] = "Task"
+        sheet["D4"] = "Outcome"
+        sheet["E4"] = "SMA"
+        sheet["F4"] = "KAWIs"
+        sheet["G4"] = "Next Step"
+        sheet["H4"] = "AIO Request"
+        sheet["I4"] = "AIO Completion"
+
+        # passdown_header_range = sheet["A4":"I4"]
+        # for cell in passdown_header_range:
+        #     cell.font = openpyxl.styles.Font(bold=True, size=11)
+
+        #create the look ahead headers
+        sheet["K4"] = "Task ID"
+        sheet["L4"] = "Priority Rank"
+        sheet["M4"] = "Estimated Completion"
+        sheet["N4"] = "Task"
+        sheet["O4"] = "Time"
+
+        # look_ahead_header_range = sheet["K4":"O4"]
+        # for cell in look_ahead_header_range:
+        #     cell.font = openpyxl.styles.Font(bold=True, size=11) 
+
+        #protect the sheet and allow modifications to the passdown and look ahead sections only
+        sheet.protection.sheet = True
+        sheet.protection.set_password("!Edwards!")
+        sheet.protection.enable()
+
+        # passdown_table_range = sheet["A4":"I103"]
+        # look_ahead_table_range = sheet["K4":"O103"]
+        # for cell in passdown_table_range:
+        #     cell.protection = openpyxl.styles.Protection(locked=False)
+        # for cell in look_ahead_table_range:
+        #     cell.protection = openpyxl.styles.Protection(locked=False)
+
+        #create passdown and look ahead table
+        passdown_display_name = day[2] + "_Passdown"
+        look_ahead_display_name = day[2] + "_Look_Ahead"
+        passdown_table = Table(ref='A4:I103', displayName=passdown_display_name, headerRowCount=1)
+        look_ahead_table = Table(ref='K4:O103', displayName=look_ahead_display_name, headerRowCount=1)
+
+
+        sheet_table_style = TableStyleInfo(
+            name="TableStyleMedium11", showRowStripes=True, showColumnStripes=True)
+        
+        passdown_table.tableStyleInfo = sheet_table_style
+        look_ahead_table.tableStyleInfo = sheet_table_style
+
+        sheet.add_table(passdown_table)
+        sheet.add_table(look_ahead_table)
 
     # Save the modified workbook
     wb.save(filename)
