@@ -170,18 +170,21 @@ def create_daily_sheets(filename, workdays):
         sheet["A1"] = "Project Passdown for WorkWeek " + str(day[1]) + " - " + day[0].strftime("%A, %B %d, %Y")
         sheet["A1"].font = openpyxl.styles.Font(bold=True, size=20)
         sheet["A1"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="bottom")
-        sheet["A1"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
-        sheet["A1"].fill = openpyxl.styles.PatternFill(
-            patternType="solid", fgColor="C0C0C0")
+        sheet["A1"].fill = openpyxl.styles.PatternFill(patternType="solid", fgColor="C0C0C0")
+        for row in sheet.iter_rows(min_row=1, max_row=1, min_col=1, max_col=16):
+            for cell in row:
+                cell.border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
         #TODO: Add LOGO
 
         # create edwards contact info
         sheet.merge_cells("A2:P2")
-        sheet["A2"] = "Edwards Site Manager: Joseph Baca (505)975-9464   -   Edwards Project Manager: Robert Nolan (503)753-0590"
+        sheet["A2"] = "Edwards Project Manager: Robert Nolan (503)753-0590   -   Edwards Site Manager: Joseph Baca (505)975-9464"
         sheet["A2"].font = openpyxl.styles.Font(size=14)
         sheet["A2"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="center")
-        sheet["A2"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
         sheet["A2"].fill = openpyxl.styles.PatternFill(patternType="solid", fgColor="C0C0C0")
+        for row in sheet.iter_rows(min_row=2, max_row=2, min_col=1, max_col=16):
+            for cell in row:
+                cell.border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
 
         #create passdown and look ahead headers
         sheet.merge_cells("A3:I3")
@@ -189,16 +192,14 @@ def create_daily_sheets(filename, workdays):
         sheet["A3"].font = openpyxl.styles.Font(bold=True, size=16)
         sheet["A3"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="center")
         sheet["A3"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
-        sheet["A3"].fill = openpyxl.styles.PatternFill(
-            patternType="solid", fgColor="808080")
+        sheet["A3"].fill = openpyxl.styles.PatternFill(patternType="solid", fgColor="808080")
         
         sheet.merge_cells("K3:P3")
         sheet["K3"] = "Look Ahead"
         sheet["K3"].font = openpyxl.styles.Font(bold=True, size=16)
         sheet["K3"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="center")
         sheet["K3"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
-        sheet["K3"].fill = openpyxl.styles.PatternFill(
-            patternType="solid", fgColor="808080")
+        sheet["K3"].fill = openpyxl.styles.PatternFill(patternType="solid", fgColor="808080")
         
         #create the divider between passdown and look ahead
         sheet.merge_cells("J3:J103")
@@ -216,9 +217,11 @@ def create_daily_sheets(filename, workdays):
         sheet["H4"] = "AIO Request"
         sheet["I4"] = "AIO Completion"
 
-        # passdown_header_range = sheet["A4":"I4"]
-        # for cell in passdown_header_range:
-        #     cell.font = openpyxl.styles.Font(bold=True, size=11)
+        # passdown header formatting
+        for row in sheet.iter_rows(min_row=4, max_row=4, min_col=1, max_col=9):
+            for cell in row:
+                cell.font = openpyxl.styles.Font(bold=True, size=11)
+                cell.border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
 
         #create the look ahead headers
         sheet["K4"] = "Task ID"
@@ -227,14 +230,17 @@ def create_daily_sheets(filename, workdays):
         sheet["N4"] = "Task"
         sheet["O4"] = "Time"
 
-        # look_ahead_header_range = sheet["K4":"O4"]
-        # for cell in look_ahead_header_range:
-        #     cell.font = openpyxl.styles.Font(bold=True, size=11) 
+        # Look ahead headers formatting
+        for row in sheet.iter_rows(min_row=4, max_row=4, min_col=11, max_col=15):
+            for cell in row:
+                cell.font = openpyxl.styles.Font(bold=True, size=11)
+                cell.border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
 
         #protect the sheet and allow modifications to the passdown and look ahead sections only
         sheet.protection.sheet = True
         sheet.protection.set_password("!Edwards!")
         sheet.protection.enable()
+
         # enable editing for passdown
         for row in sheet.iter_rows(min_row=4, max_row=103, min_col=1, max_col=9):
             for cell in row:
@@ -260,6 +266,23 @@ def create_daily_sheets(filename, workdays):
 
         sheet.add_table(passdown_table)
         sheet.add_table(look_ahead_table)
+
+        #create passdown column borders
+        for col in sheet.iter_cols(min_row=4, max_row=103, min_col=1, max_col=9):
+            for cell in col:
+                cell.border = openpyxl.styles.Border(right=openpyxl.styles.Side(border_style="thick"))
+
+        #create look ahead column borders
+        for col in sheet.iter_cols(min_row=4, max_row=103, min_col=11, max_col=16):
+            for cell in col:
+                cell.border = openpyxl.styles.Border(right=openpyxl.styles.Side(border_style="thick"))
+
+        #create bottom boarder
+        for row in sheet.iter_rows(min_row=103, max_row=103, min_col=1, max_col=15):
+            for cell in row:
+                cell.border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
+
+
 
     # Save the modified workbook
     wb.save(filename)
