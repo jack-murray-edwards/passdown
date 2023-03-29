@@ -167,7 +167,7 @@ def create_daily_sheets(filename, workdays):
         
         #create sheet title
         sheet.merge_cells("A1:P1")
-        sheet["A1"] = "Project Passdown for WorkWeek " + str(day[1]) + " - " + day[0].strftime("%A, %B %d, %Y")
+        sheet["A1"] = "Project Passdown for Work Week " + str(day[1]) + " - " + day[0].strftime("%A, %B %d, %Y")
         sheet["A1"].font = openpyxl.styles.Font(bold=True, size=20)
         sheet["A1"].alignment = openpyxl.styles.Alignment(horizontal="center", vertical="bottom")
         sheet["A1"].fill = openpyxl.styles.PatternFill(patternType="solid", fgColor="C0C0C0")
@@ -207,27 +207,18 @@ def create_daily_sheets(filename, workdays):
             patternType="solid", fgColor="000000")
         
         #header styles
-        header_style = openpyxl.styles.Font(bold=True, size=11, color="e5e4e2")
+        
 
         #create the passdown headers
         sheet["A4"] = "Task ID"
-        sheet["A4"].font = header_style
         sheet["B4"] = "Team Assigned"
-        sheet["B4"].font = header_style
         sheet["C4"] = "Task"
-        sheet["C4"].font = header_style
         sheet["D4"] = "Outcome"
-        sheet["D4"].font = header_style
         sheet["E4"] = "SMA"
-        sheet["E4"].font = header_style
         sheet["F4"] = "KAWIs"
-        sheet["F4"].font = header_style
         sheet["G4"] = "Next Step"
-        sheet["G4"].font = header_style
         sheet["H4"] = "AIO Request"
-        sheet["H4"].font = header_style
         sheet["I4"] = "AIO Completion"
-        sheet["I4"].font = header_style
 
         # passdown header formatting
         for row in sheet.iter_rows(min_row=4, max_row=4, min_col=1, max_col=9):
@@ -237,15 +228,10 @@ def create_daily_sheets(filename, workdays):
 
         #create the look ahead headers
         sheet["K4"] = "Task ID"
-        sheet["K4"].font = header_style
         sheet["L4"] = "Priority Rank"
-        sheet["L4"].font = header_style
         sheet["M4"] = "Estimated Completion"
-        sheet["M4"].font = header_style
         sheet["N4"] = "Task"
-        sheet["N4"].font = header_style
         sheet["O4"] = "Time"
-        sheet["O4"].font = header_style
 
         # Look ahead headers formatting
         for row in sheet.iter_rows(min_row=4, max_row=4, min_col=11, max_col=15):
@@ -276,13 +262,19 @@ def create_daily_sheets(filename, workdays):
 
 
         sheet_table_style = TableStyleInfo(
-            name="TableStyleMedium1", showRowStripes=True, showColumnStripes=False)
+            name="TableStyleMedium15", showRowStripes=True, showColumnStripes=False)
         
         passdown_table.tableStyleInfo = sheet_table_style
         look_ahead_table.tableStyleInfo = sheet_table_style
 
         sheet.add_table(passdown_table)
         sheet.add_table(look_ahead_table)
+
+        #change header style
+        header_style = openpyxl.styles.Font(bold=True, size=11, color="e5e4e2")
+        for row in sheet.iter_rows(min_row=4, max_row=4, min_col=1, max_col=15):
+            for cell in row:
+                cell.font = header_style
 
         #create passdown column borders
         for col in sheet.iter_cols(min_row=4, max_row=103, min_col=1, max_col=9):
