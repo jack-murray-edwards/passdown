@@ -10,7 +10,7 @@ import datetime
 import openpyxl
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.utils.cell import range_boundaries
-
+from openpyxl.drawing.image import Image
 
 # get date range for generating dictionary
 start_day = datetime.date(2023, 4, 3)
@@ -143,7 +143,7 @@ def create_daily_sheets(filename, workdays):
 
         #resize the columns
         sheet.column_dimensions["A"].width = 11
-        sheet.column_dimensions["B"].width = 11
+        sheet.column_dimensions["B"].width = 17
         sheet.column_dimensions["C"].width = 43
         sheet.column_dimensions["D"].width = 65
         sheet.column_dimensions["E"].width = 8.75
@@ -174,7 +174,10 @@ def create_daily_sheets(filename, workdays):
         for row in sheet.iter_rows(min_row=1, max_row=1, min_col=1, max_col=16):
             for cell in row:
                 cell.border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
-        #TODO: Add LOGO
+        #Add the logo
+        img = openpyxl.drawing.image.Image(
+            '/home/jack/Dropbox/Workspace/code/passdown/Edwards_logo_for_sheets.png')
+        sheet.add_image(img, "C1")
 
         # create edwards contact info
         sheet.merge_cells("A2:P2")
