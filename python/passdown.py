@@ -138,10 +138,15 @@ def create_daily_sheets(filename, workdays):
 
     # Loop over the workdays
     for day in workdays:
+
         # Get the sheet for the current day
         sheet = wb[day[2]]
-        
-        #TODO alternating week tab colors
+        print(day[1])
+        #alternating week tab colors
+        if day[1] % 2 == 0:
+            sheet.sheet_properties.tabColor = "b22222"
+        else:
+            sheet.sheet_properties.tabColor = "708090"
 
         #resize the columns
         sheet.column_dimensions["A"].width = 11
@@ -338,6 +343,7 @@ def create_contents_sheet(filename):
     wb.save(filename)
 
 def create_assets_sheet(filename):
+    x = 1
     #TODO create all sheet assets for data vallidation
 
 project_workbook = "excel/Project_Passdown_WW14-WW28.xlsx"
