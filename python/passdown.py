@@ -11,6 +11,7 @@ import openpyxl
 from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.utils.cell import range_boundaries
 from openpyxl.drawing.image import Image
+from openpyxl.worksheet.datavalidation import DataValidation
 
 # get date range for generating dictionary
 start_day = datetime.date(2023, 4, 3)
@@ -383,20 +384,21 @@ def create_daily_sheets(filename, workdays):
 
         #Set up data validation for for required cells in tables
         #SMA and KAWI data validation
-        for row in sheet.iter_rows(min_row=5, max_row=103, min_col=5, max_col=6):
-            for cell in row:
-                cell.data_validation = openpyxl.worksheet.datavalidation.DataValidation(type="list", formula1="passdown_assets!$C$1:$C$3")
-        
+        dv1 = DataValidation(type="list", formula1="passdown_assets!$C$1:$C$3", allow_blank=True)
+        dv1.add("E1:F103")
+
         #Set up data validation for AIO Request
-        for row in sheet.iter_rows(min_row=5, max_row=103, min_col=8, max_col=9):
-            for cell in row:
-                cell.data_validation = openpyxl.worksheet.datavalidation.DataValidation(type="list", formula1="passdown_assets!$A$1:$A$26")
+        dv2 = DataValidation(type="list", formula1="passdown_assets!$A$1:$A$26", allow_blank=True)
+        dv2.add("H1:H103")
 
         #Set up data validation for AIO Completion
-        for row in sheet.iter_rows(min_row=5, max_row=103, min_col=9, max_col=9):
-            for cell in row:
-                cell.data_validation = openpyxl.worksheet.datavalidation.DataValidation(type="list", formula1="passdown_assets!$B$1:$B$36")
+        dv3 = DataValidation(type="list", formula1="passdown_assets!$B$1:$B$36", allow_blank=True)
+        dv3.add("I1:I103")
 
+        #add data validation to the sheet
+        sheet.add_data_validation(dv1)
+        sheet.add_data_validation(dv2)
+        sheet.add_data_validation(dv3)
 
         #TODO Text Wrapping in tables
 
@@ -429,7 +431,7 @@ def create_contents_sheet(filename):
         # Add a hyperlink to the sheet
         cell = contents_sheet.cell(row=contents_sheet.max_row+1, column=1)
         cell.value = sheet
-        cell.hyperlink = f"'{sheet}'!A1"#FIXME get internal sheet link
+        cell.hyperlink = f"#'{sheet}'!A1"#FIXME get internal sheet link
 
     # Save the modified workbook
     wb.save(filename)
