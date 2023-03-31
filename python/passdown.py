@@ -18,7 +18,7 @@ from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Fo
 
 # get date range for generating dictionary
 start_day = datetime.date(2023, 4, 3)
-end_day = datetime.date(2023, 7, 7)
+end_day = datetime.date(2023, 7, 14)
 # TODO Get this info from somewhere other than the code
 
 def get_workdays(start_date, end_date):
