@@ -301,12 +301,104 @@ def create_daily_sheets(filename, workdays):
         for row in sheet.iter_rows(min_row=103, max_row=103, min_col=1, max_col=15):
             for cell in row:
                 cell.border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
+        
+        #create right boarder
+        for col in sheet.iter_cols(min_row=1, max_row=3, min_col=16, max_col=16):
+            for cell in col:
+                cell.border = openpyxl.styles.Border(right=openpyxl.styles.Side(border_style="thick"))
 
-        #TODO fix edge border
+        # Cell data validation for SMA and KAWIs
+        wb_assets = wb["passdown_assets"]
+        
+        # passdown_assets --> AIO Status
+        wb_assets["A1"] = "NOT AIO: Edwards Internal"
+        wb_assets["A2"] = "Misc. See Comments"
+        wb_assets["A3"] = "Request Per Tool Owner"
+        wb_assets["A4"] = "Abatement Commissioning"
+        wb_assets["A5"] = "Abatement Demo - Clean"
+        wb_assets["A6"] = "Abatement Demo - Like New"
+        wb_assets["A7"] = "Abatement Demo - Scrap"
+        wb_assets["A8"] = "Abatement POCs"
+        wb_assets["A9"] = "Cap Count"
+        wb_assets["A10"] = "Chiller Install"
+        wb_assets["A11"] = "EPA testing"
+        wb_assets["A12"] = "Frame Reassembly"
+        wb_assets["A13"] = "Frame Split"
+        wb_assets["A14"] = "LSS Termination"
+        wb_assets["A15"] = "LSS Testing (SL1)"
+        wb_assets["A16"] = "LSS Testing(SL2)"
+        wb_assets["A17"] = "Move in and inventory"
+        wb_assets["A18"] = "NG turn off"
+        wb_assets["A19"] = "NG turn on SL1"
+        wb_assets["A20"] = "Pump Commissioning"
+        wb_assets["A21"] = "Pump Demo"
+        wb_assets["A22"] = "Pump POCs"
+        wb_assets["A23"] = "Callback - Abatement POC"
+        wb_assets["A24"] = "Callback - Pump POCs"
+        wb_assets["A25"] = "Callback - Abatement Commissioning"
+        wb_assets["A26"] = "Callback - Pump Commissioning"
+        
+        # passdown_assets --> AIO completion
+        wb_assets["B1"] = "COMPLETE"
+        wb_assets["B2"] = "Ongoing"
+        wb_assets["B3"] = "Construction Not Complete"
+        wb_assets["B4"] = "Damaged Cables"
+        wb_assets["B5"] = "Edwards"
+        wb_assets["B6"] = "Intermixing"
+        wb_assets["B7"] = "Issue With Pressure"
+        wb_assets["B8"] = "Kinked Tubing"
+        wb_assets["B9"] = "Label Issues"
+        wb_assets["B10"] = "Misc. See Comments"
+        wb_assets["B11"] = "Punchlist Item Found"
+        wb_assets["B12"] = "Abatement Not Commissioned"
+        wb_assets["B13"] = "Area RED Taped"
+        wb_assets["B14"] = "CAB Failed QAQC"
+        wb_assets["B15"] = "CAB Failed Testing"
+        wb_assets["B16"] = "Duplicated Request"
+        wb_assets["B17"] = "Failed QAQC"
+        wb_assets["B18"] = "Failed Terms"
+        wb_assets["B19"] = "Incorrect Gas/POC Added"
+        wb_assets["B20"] = "Incorrect Information On Form"
+        wb_assets["B21"] = "Incorrect Request Form"
+        wb_assets["B22"] = "Issue Found At Testing"
+        wb_assets["B23"] = "Manufacturing Did Not Release Tool"
+        wb_assets["B24"] = "Misc. See Comments"
+        wb_assets["B25"] = "No Intel Representative"
+        wb_assets["B26"] = "No Longer Needed"
+        wb_assets["B27"] = "Per CC's request"
+        wb_assets["B28"] = "Per Tool Owner"
+        wb_assets["B29"] = "Per Trades Request"
+        wb_assets["B30"] = "Requested Before CAB was Completed"
+        wb_assets["B31"] = "Test"
+        wb_assets["B32"] = "Tool Has NOT met SL1"
+        wb_assets["B33"] = "Tool not Construction Complete"
+        wb_assets["B34"] = "Trades not Ready"
+        wb_assets["B35"] = "Trades Unavailable"
+        wb_assets["B36"] = "VF Checklist Issuex"
 
-        #TODO Cell data validation for SMA and KAWIs
+        # passdown_assets --> KAWI and SMA
+        wb_assets["C1"] = "Yes"
+        wb_assets["C2"] = "No"
+        wb_assets["C3"] = "N/A"
 
-        #TODO Text Wrapping in 
+        #Set up data validation for for required cells in tables
+        #SMA and KAWI data validation
+        for row in sheet.iter_rows(min_row=5, max_row=103, min_col=5, max_col=6):
+            for cell in row:
+                cell.data_validation = openpyxl.worksheet.datavalidation.DataValidation(type="list", formula1="passdown_assets!$C$1:$C$3")
+        
+        #Set up data validation for AIO Request
+        for row in sheet.iter_rows(min_row=5, max_row=103, min_col=8, max_col=9):
+            for cell in row:
+                cell.data_validation = openpyxl.worksheet.datavalidation.DataValidation(type="list", formula1="passdown_assets!$A$1:$A$26")
+
+        #Set up data validation for AIO Completion
+        for row in sheet.iter_rows(min_row=5, max_row=103, min_col=9, max_col=9):
+            for cell in row:
+                cell.data_validation = openpyxl.worksheet.datavalidation.DataValidation(type="list", formula1="passdown_assets!$B$1:$B$36")
+
+
+        #TODO Text Wrapping in tables
 
 
     # Save the modified workbook
