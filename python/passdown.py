@@ -1,9 +1,11 @@
 '''
-Passdown_project__generator.py
-V1.0 2023-03-31
+:title: passdown.py
+:version: V1.0
 :author: Jack Murray
-company: Edwards Vacuum
-jack.murray@edwardsvacuum.com
+:company: Edwards Vacuum
+:email: jack.murray@edwardsvacuum.com
+:requires: openpyxl, datetime, openpyxl.worksheet.table, openpyxl.utils.cell, openpyxl.drawing.image, openpyxl.worksheet.datavalidation, openpyxl.styles, openpyxl.styles.PatternFill, openpyxl.styles.Border, openpyxl.styles.Side, openpyxl.styles.Alignment, openpyxl.styles.Protection, openpyxl.styles.Font
+:date: 2023-03-22
 '''
 
 import datetime
@@ -444,7 +446,8 @@ def create_contents_sheet(filename):
         # Add a hyperlink to the sheet
         cell = contents_sheet.cell(row=contents_sheet.max_row+1, column=1)
         cell.value = sheet
-        cell.hyperlink = f"#'{sheet}'!A1"#FIXME get internal sheet link
+        cell.hyperlink = f"#'{sheet}'!A1"
+        cell.font = Font(color="0000FF", underline="single", size=12, bold=True)
 
         if cell.row % 2 == 0:
             cell.fill = PatternFill(patternType="solid", fgColor="C0C0C0")
