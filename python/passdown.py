@@ -144,7 +144,7 @@ def create_daily_sheets(filename, workdays):
         print(day[1])
         #alternating week tab colors
         if day[1] % 2 == 0:
-            sheet.sheet_properties.tabColor = "b22222"
+            sheet.sheet_properties.tabColor = "b22222" #TODO set colors
         else:
             sheet.sheet_properties.tabColor = "708090"
 
