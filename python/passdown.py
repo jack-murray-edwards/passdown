@@ -164,8 +164,8 @@ def create_daily_sheets(filename, workdays):
         sheet.column_dimensions["I"].width = 22.75
         sheet.column_dimensions["J"].width = 3.5
         sheet.column_dimensions["K"].width = 11
-        sheet.column_dimensions["L"].width = 8.75
-        sheet.column_dimensions["M"].width = 14.5
+        sheet.column_dimensions["L"].width = 14.5
+        sheet.column_dimensions["M"].width = 23
         sheet.column_dimensions["N"].width = 71
         sheet.column_dimensions["O"].width = 12
         sheet.column_dimensions["P"].width = 34
