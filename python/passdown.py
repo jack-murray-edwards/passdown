@@ -420,7 +420,7 @@ def create_daily_sheets(filename, workdays):
         #Add contents sheet link
         sheet["P10"] = "Contents"
         sheet["P10"].hyperlink = "#contents!A1"
-        sheet["P10"].font = Font(bold=True, color="0000FF00", underline="single")
+        sheet["P10"].font = Font(bold=True, color="0000FF", underline="single", size=12)
 
         #Fix bottom border on last row
         sheet["P1"].border = openpyxl.styles.Border(
