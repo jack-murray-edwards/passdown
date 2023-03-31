@@ -12,6 +12,7 @@ from openpyxl.worksheet.table import Table, TableStyleInfo
 from openpyxl.utils.cell import range_boundaries
 from openpyxl.drawing.image import Image
 from openpyxl.worksheet.datavalidation import DataValidation
+from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
 
 # get date range for generating dictionary
 start_day = datetime.date(2023, 4, 3)
@@ -145,7 +146,7 @@ def create_daily_sheets(filename, workdays):
         print(day[1])
         #alternating week tab colors
         if day[1] % 2 == 0:
-            sheet.sheet_properties.tabColor = "b22222" #TODO set colors
+            sheet.sheet_properties.tabColor = "b22222"
         else:
             sheet.sheet_properties.tabColor = "708090"
 
@@ -400,8 +401,11 @@ def create_daily_sheets(filename, workdays):
         sheet.add_data_validation(dv2)
         sheet.add_data_validation(dv3)
 
-        #TODO Text Wrapping in tables
-
+        #Text Wrapping in tables
+        for row in sheet.iter_rows(min_row=5, max_row=103, min_col=1, max_col=16):
+            for cell in row:
+                cell.alignment = Alignment(wrap_text=True)
+                cell.alignment = Alignment(horizontal='left', vertical='center')
 
     # Save the modified workbook
     wb.save(filename)
@@ -435,10 +439,6 @@ def create_contents_sheet(filename):
 
     # Save the modified workbook
     wb.save(filename)
-
-def create_assets_sheet(filename):
-    x = 1
-    #TODO create all sheet assets for data vallidation
 
 project_workbook = "excel/Project_Passdown_WW14-WW28.xlsx"
 my_workdays = get_workdays(start_day, end_day)
