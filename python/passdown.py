@@ -1,8 +1,8 @@
 '''
 Passdown_project__generator.py
-V1.0
+V1.0 2023-03-31
 :author: Jack Murray
-company: Edwards Vacuum. ses
+company: Edwards Vacuum
 jack.murray@edwardsvacuum.com
 '''
 
@@ -132,7 +132,7 @@ def create_daily_sheets(filename, workdays):
     :param filename: a string containing the name of the file to load the workbook from (including the file extension)
     :param workdays: a list of dictionaries in the form {'date': datetime.date, 'week_num': int}
     :requires: openpyxl
-    :date: 2023-03-22
+    :date: 2023-03-231
     '''
 
     # Load the workbook
@@ -424,18 +424,30 @@ def create_contents_sheet(filename):
 
     # Create a new sheet for the contents
     contents_sheet = wb.worksheets[0]
+    contents_sheet.column_dimensions["A"].width = 20
+
+    # Add the title
+    contents_sheet["A1"] = "Links to sheets"
+    contents_sheet["A1"].font = Font(bold=True, size=16, color="00C0C0C0")
+    contents_sheet["A1"].alignment = Alignment(horizontal="center")
+    contents_sheet["A1"].fill = PatternFill(patternType="solid", fgColor="000000")
 
     # Loop over the sheets and add links to the contents sheet
     #TODO add weekday, workweek and headers/formatting
     for sheet in wb.sheetnames:
-        # Skip the contents sheet
+        # Skip the contents sheet and workbook assets
         if sheet == "Contents":
+            continue
+        if sheet == "passdown_assets":
             continue
 
         # Add a hyperlink to the sheet
         cell = contents_sheet.cell(row=contents_sheet.max_row+1, column=1)
         cell.value = sheet
         cell.hyperlink = f"#'{sheet}'!A1"#FIXME get internal sheet link
+
+        if cell.row % 2 == 0:
+            cell.fill = PatternFill(patternType="solid", fgColor="C0C0C0")
 
     # Save the modified workbook
     wb.save(filename)
