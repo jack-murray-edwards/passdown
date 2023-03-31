@@ -234,6 +234,10 @@ def create_daily_sheets(filename, workdays):
             for cell in row:
                 cell.font = openpyxl.styles.Font(bold=True, size=11)
                 cell.border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
+        #Fix bottom border on last row
+        sheet["P1"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
+        sheet["P2"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
+        sheet["P3"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
 
         #create the look ahead headers
         sheet["K4"] = "Task ID"
@@ -402,6 +406,24 @@ def create_daily_sheets(filename, workdays):
             for cell in row:
                 cell.alignment = Alignment(wrap_text=True)
                 cell.alignment = Alignment(horizontal='left', vertical='center')
+
+        #Add look ahead key
+        sheet["P4"].fill = PatternFill(patternType="solid", fgColor="00808080")
+        sheet["P5"].fill = PatternFill(patternType="solid", fgColor="0000FF00") # Green - Sheduled
+        sheet["P5"] = "Scheduled"
+        sheet["P6"].fill = PatternFill(patternType="solid", fgColor="00FF00FF") # Pink - Awaiting next steps
+        sheet["P6"] = "Awaiting next steps"
+        sheet["P7"].fill = PatternFill(patternType="solid", fgColor="00FF0000") # Red - Imeadiate Escalation (High Priority)
+        sheet["P7"] = "Imeadiate Escalation (High Priority)"
+        sheet["P8"].fill = PatternFill(patternType="solid", fgColor="00FFFF00")  # Yellow - Waiting on Parts
+        sheet["P8"] = "Waiting on Parts"
+        for row in sheet.iter_rows(min_row=9, max_row=103, min_col=16, max_col=16):
+            for cell in row:
+                cell.fill = PatternFill(patternType="solid", fgColor="00808080")
+
+        #Add contents sheet link
+        sheet["P10"] = "Contents"
+        sheet["P10"].hyperlink = "#contents!A1"
 
     # Save the modified workbook
     wb.save(filename)
