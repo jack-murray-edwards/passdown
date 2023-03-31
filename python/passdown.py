@@ -170,12 +170,6 @@ def create_daily_sheets(filename, workdays):
         sheet.column_dimensions["O"].width = 12
         sheet.column_dimensions["P"].width = 34
 
-        #create large boarder around the sheet
-        # sheet["A1:P103"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"),
-        #                                                 left=openpyxl.styles.Side(border_style="thick"),
-        #                                                 right=openpyxl.styles.Side(border_style="thick"),
-        #                                                 top=openpyxl.styles.Side(border_style="thick"))
-        
         #create sheet title
         sheet.merge_cells("A1:P1")
         sheet.row_dimensions[1].height = 84
