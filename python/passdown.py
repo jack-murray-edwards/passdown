@@ -234,10 +234,6 @@ def create_daily_sheets(filename, workdays):
             for cell in row:
                 cell.font = openpyxl.styles.Font(bold=True, size=11)
                 cell.border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
-        #Fix bottom border on last row
-        sheet["P1"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
-        sheet["P2"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
-        sheet["P3"].border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
 
         #create the look ahead headers
         sheet["K4"] = "Task ID"
@@ -424,6 +420,15 @@ def create_daily_sheets(filename, workdays):
         #Add contents sheet link
         sheet["P10"] = "Contents"
         sheet["P10"].hyperlink = "#contents!A1"
+        sheet["P10"].font = Font(bold=True, color="0000FF00", underline="single")
+
+        #Fix bottom border on last row
+        sheet["P1"].border = openpyxl.styles.Border(
+            bottom=openpyxl.styles.Side(border_style="thick"))
+        sheet["P2"].border = openpyxl.styles.Border(
+            bottom=openpyxl.styles.Side(border_style="thick"))
+        sheet["P3"].border = openpyxl.styles.Border(
+            bottom=openpyxl.styles.Side(border_style="thick"))
 
     # Save the modified workbook
     wb.save(filename)
