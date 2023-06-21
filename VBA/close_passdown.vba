@@ -1,12 +1,11 @@
 Sub close_passdown ()
-'create a new instance of Outlook
-    Dim appOutlook As Object
+'Macro to close out the passdown, copy todays jobs to the summary sheet
+'and send out a passdown screenshot with one button
+'Jack.Murray@edwardsvacuum.com
+'v1.0 2023-06-21
+
     Dim mailItem As Object
     Set appOutlook = CreateObject("Outlook.Application")
-
-    'clean up objects
-    Set mailItem = Nothing
-    Set appOutlook = Nothing
 
     'Select all cells that are not empty
     Range("A1").Select
@@ -31,6 +30,13 @@ Sub close_passdown ()
     ActiveShape.Copy
     tempChart.Activate
     ActiveChart.Paste
+
+    'Setup savepath as Users local temp folder with sheet name as filename
+    Dim savePath As String
+    Set fSys = CreateObject("Scripting.FileSystemObject")
+    Const tempFolder = 2
+    tempFolderPath = fSys.GetSpecialFolder(tempFolder)
+    savePath = tempFolderPath & "\" & ActiveSheet.Name & ".jpg"
 
     'Save chart to User's temp folder as PNG File
     tempChart.Chart.Export savePath
