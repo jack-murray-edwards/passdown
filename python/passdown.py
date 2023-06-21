@@ -8,6 +8,7 @@
 :date: 2023-03-22
 '''
 
+#TODO figure out how to get this set up as a windows script
 import datetime
 import openpyxl
 from openpyxl.worksheet.table import Table, TableStyleInfo
@@ -248,21 +249,6 @@ def create_daily_sheets(filename, workdays):
                 cell.font = openpyxl.styles.Font(bold=True, size=11)
                 cell.border = openpyxl.styles.Border(bottom=openpyxl.styles.Side(border_style="thick"))
 
-        #protect the sheet and allow modifications to the passdown and look ahead sections only
-        sheet.protection.sheet = True
-        sheet.protection.set_password("!Edwards!")
-        sheet.protection.enable()
-
-        # enable editing for passdown
-        for row in sheet.iter_rows(min_row=4, max_row=103, min_col=1, max_col=9):
-            for cell in row:
-                cell.protection = openpyxl.styles.Protection(locked=False)
-
-        # enable editing for look ahead
-        for row in sheet.iter_rows(min_row=4, max_row=103, min_col=11, max_col=15):
-            for cell in row:
-                cell.protection = openpyxl.styles.Protection(locked=False)
-
         #create passdown and look ahead table
         passdown_display_name = day[2] + "_Passdown"
         look_ahead_display_name = day[2] + "_Look_Ahead"
@@ -409,8 +395,8 @@ def create_daily_sheets(filename, workdays):
         sheet["P5"] = "Scheduled"
         sheet["P6"].fill = PatternFill(patternType="solid", fgColor="00FF00FF") # Pink - Awaiting next steps
         sheet["P6"] = "Awaiting next steps"
-        sheet["P7"].fill = PatternFill(patternType="solid", fgColor="00FF0000") # Red - Imeadiate Escalation (High Priority)
-        sheet["P7"] = "Imeadiate Escalation (High Priority)"
+        sheet["P7"].fill = PatternFill(patternType="solid", fgColor="00FF0000") # Red - Immediate Escalation (High Priority) 
+        sheet["P7"] = "Immediate Escalation (High Priority)"
         sheet["P8"].fill = PatternFill(patternType="solid", fgColor="00FFFF00")  # Yellow - Waiting on Parts
         sheet["P8"] = "Waiting on Parts"
         for row in sheet.iter_rows(min_row=9, max_row=103, min_col=16, max_col=16):
@@ -422,6 +408,20 @@ def create_daily_sheets(filename, workdays):
         sheet["P10"].hyperlink = "#contents!A1"
         sheet["P10"].font = Font(
             bold=True, color="000000FF", underline="single", size=12)
+        #TODO make this a link to the contents sheet
+
+        #Add passdown summary sheet link
+        sheet["P11"] = "Passdown Summary"
+        sheet["P11"].hyperlink = "#passdown_summary!A1"
+        sheet["P11"].font = Font(
+            bold=True, color="000000FF", underline="single", size=12)
+        #TODO make this a link to the passdown summary sheet
+
+        #Add passdown close out button
+        sheet["P12"] = "Close Out"
+        sheet["P12"].font = Font(
+            bold=True, color="000000FF", underline="single", size=12)
+        #TODO add close out macro
 
         #Fix bottom border on last row
         sheet["P1"].border = openpyxl.styles.Border(
