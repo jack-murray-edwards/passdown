@@ -408,20 +408,18 @@ def create_daily_sheets(filename, workdays):
         sheet["P10"].hyperlink = "#contents!A1"
         sheet["P10"].font = Font(
             bold=True, color="000000FF", underline="single", size=12)
-        #TODO make this a link to the contents sheet
 
         #Add passdown summary sheet link
         sheet["P11"] = "Passdown Summary"
         sheet["P11"].hyperlink = "#passdown_summary!A1"
         sheet["P11"].font = Font(
             bold=True, color="000000FF", underline="single", size=12)
-        #TODO make this a link to the passdown summary sheet
 
-        #Add passdown close out button
+        #Add passdown close out 'button'
         sheet["P12"] = "Close Out"
         sheet["P12"].font = Font(
             bold=True, color="000000FF", underline="single", size=12)
-        #TODO add close out macro
+        #TODO add close out macro to button
 
         #Fix bottom border on last row
         sheet["P1"].border = openpyxl.styles.Border(
