@@ -6,6 +6,7 @@ Sub close_passdown ()
 
     Dim mailItem As Object
     Set appOutlook = CreateObject("Outlook.Application")
+    Dim savePath As String
 
     'Select all cells that are not empty
     Range("A1").Select
@@ -32,7 +33,6 @@ Sub close_passdown ()
     ActiveChart.Paste
 
     'Setup savepath as Users local temp folder with sheet name as filename
-    Dim savePath As String
     Set fSys = CreateObject("Scripting.FileSystemObject")
     Const tempFolder = 2
     tempFolderPath = fSys.GetSpecialFolder(tempFolder)
@@ -66,7 +66,7 @@ Sub close_passdown ()
     'check if the passdown has been closed already
     Range("AA1").Select
     If ActiveCell.Value = "passdown closed" Then
-        MsgBox "Passdown already closed" & vbNewLine & "Current user is: " & Application.UserName
+        MsgBox "Passdown already closed"
         Exit Sub
     End If
 
