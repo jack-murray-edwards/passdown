@@ -12,7 +12,8 @@
 import datetime
 import openpyxl
 from openpyxl.worksheet.table import Table, TableStyleInfo
-from openpyxl.utils.cell import range_boundaries
+#from openpyxl.utils.cell import range_boundaries
+import openpyxl.utils.cell
 from openpyxl.drawing.image import Image
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.styles import PatternFill, Border, Side, Alignment, Protection, Font
