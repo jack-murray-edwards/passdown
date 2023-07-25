@@ -51,8 +51,8 @@ Sub close_passdown ()
     'create a new e-mail item
     Set mailItem = appOutlook.CreateItem(0)
         With mailItem
-        .To = "figure_this_out@later.com"
-        .CC = "figure_this_out@later.com"
+        .To = "figure_this_out@later.com" 'TODO create loop here to add all emails from a range on the sheet
+        .CC = "figure_this_out@later.com" 'TODO edwards iq dist.
         .Subject = "passdown screenshot for " & ActiveSheet.Name
         .Body = "Attached is the passdown image for " & ActiveSheet.Name
         .Attachments.Add savePath
@@ -86,7 +86,7 @@ Sub close_passdown ()
 
     'create a flag in cell AA1 to indicate that the passdown has been closed
     Range("AA1").Select
-    ActiveCell.FormulaR1C1 = "passdown closed"
+    ActiveCell.FormulaR1C1 = "passdown closed" 'FIXME does this need to be ActiveCell.Value?
     Range("AA1").Select
     Selection.Style = "Good"
     Selection.Font.Bold = True
